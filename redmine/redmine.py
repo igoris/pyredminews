@@ -115,6 +115,10 @@ class Project(Redmine_Item):
 		self.__dict__['time_entries'] = Redmine_Items_Manager(redmine, Time_Entry,
 													query_path='/projects/%s/time_entries.json' % self.id,
 													item_new_path='/projects/%s/time_entries.json' % self.id)
+		
+		self.__dict__['members'] = Redmine_Items_Manager(redmine, User,
+													query_path='/projects/%s/memberships.json' % self.id,
+													item_new_path='/projects/%s/memberships.json' % self.id)
 
 		
 		# Manage wiki pages if they're available
