@@ -115,8 +115,9 @@ class Project(Redmine_Item):
 		self.__dict__['time_entries'] = Redmine_Items_Manager(redmine, Time_Entry,
 													query_path='/projects/%s/time_entries.json' % self.id,
 													item_new_path='/projects/%s/time_entries.json' % self.id)
-		
-		self.__dict__['members'] = Redmine_Items_Manager(redmine, User,
+
+		# Manage memberships for this project
+		self.__dict__['members'] = Redmine_Items_Manager(redmine, Membership,
 													query_path='/projects/%s/memberships.json' % self.id,
 													item_new_path='/projects/%s/memberships.json' % self.id)
 
@@ -251,6 +252,27 @@ class User(Redmine_Item):
 	def __str__(self):
 		return '<Redmine user #%s, "%s %s">' % (self.id, self.firstname, self.lastname)
 
+class Membership(Redmine_Item):
+	'''Object for representing a single relation between Redmine Project and Redmine User'''
+	# data hints:
+	id = None
+	project = None
+	user = None
+	roles = None
+
+	_field_type = {
+		'project': 'project',
+		'user': 'user',
+		}
+
+	# How to communicate this info to/from the server
+	_query_container = 'memberships'
+	_query_path = '/memberships.json'
+	_item_path = '/memberships/%s.json'
+	_item_new_path = '/memberships.json'
+
+	def __str__(self):
+		return '<Redmine membership #%s, "%s %s">' % (self.id, self.user, self.project)
 
 class News(Redmine_Item):
 	'''Object for representing a single Redmine news story.'''
